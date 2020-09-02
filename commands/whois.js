@@ -1,5 +1,3 @@
-const { getUserFromMention } = require('../util/getUser');
-
 module.exports = {
   name: 'whois',
   description: 'Get information about a user.',

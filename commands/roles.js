@@ -5,7 +5,6 @@ module.exports = {
   description: 'List of existing roles!',
   execute(message, client) {
     const split = message.content.split(/ +/);
-    const args = split.slice(1);
 
     const roles = message.guild.roles.cache
       .sort((a, b) => b.position - a.position)
