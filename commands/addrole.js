@@ -6,6 +6,9 @@ module.exports = {
   execute(message, client) {
     const split = message.content.split(/ +/);
     const args = split.slice(1);
+    if (!args[0]) {
+      throw new Error('No given name!');
+    }
     if (args[1].length > 6) {
       throw new Error('No valid hex color!');
     }

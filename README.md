@@ -6,5 +6,5 @@
   - [ ] Softban
 - [ ] Admin automation
   - [x] Role assigment
-  - [ ] Create roles
+  - [x] Create roles
 - [ ] Log
