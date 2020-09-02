@@ -8,6 +8,7 @@
   - [x] Role assigment
   - [x] Create roles
   - [x] Delete roles
+  - [x] Change role name
   - [ ] Role info
-  - [ ] Change nickname
+  - [ ] Change user nickname
 - [ ] Log
