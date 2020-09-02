@@ -7,4 +7,7 @@
 - [ ] Admin automation
   - [x] Role assigment
   - [x] Create roles
+  - [x] Delete roles
+  - [ ] Role info
+  - [ ] Change nickname
 - [ ] Log
