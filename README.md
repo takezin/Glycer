@@ -5,6 +5,6 @@
   - [x] Ban
   - [ ] Softban
 - [ ] Admin automation
-  - [x] Role asigment
+  - [x] Role assigment
   - [ ] Create roles
 - [ ] Log
