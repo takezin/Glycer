@@ -11,6 +11,9 @@ module.exports = {
     if (args[0] === 'all') {
       const roleAll = require('./role/all.js');
       roleAll(message, client, role);
+    } else if (args[0] === 'info') {
+      const roleInfo = require('./role/info.js');
+      roleInfo(message, client, role);
     } else {
       const embed = new Discord.MessageEmbed();
       if (member.roles.cache.some((i) => i.name === role.name)) {
