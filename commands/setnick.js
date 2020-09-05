@@ -5,7 +5,6 @@ module.exports = {
   description: 'Change user nickname!',
   execute(message) {
     const member = message.mentions.members.first();
-    const split = message.content.split(/ +/);
     const arg = args(message.content);
     const nickname = arg[1];
 

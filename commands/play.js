@@ -1,4 +1,5 @@
 const ytdl = require('ytdl-core');
+const Discord = require('discord.js');
 
 module.exports = {
   name: 'play',
@@ -25,6 +26,7 @@ module.exports = {
       const song = {
         title: songInfo.videoDetails.title,
         url: songInfo.videoDetails.video_url,
+        thumbnail: songInfo.videoDetails.thumbnail.thumbnails[0].url,
       };
 
       if (!serverQueue) {
@@ -52,9 +54,18 @@ module.exports = {
         }
       } else {
         serverQueue.songs.push(song);
-        return message.channel.send(
-          `${song.title} has been added to the queue!`
-        );
+        const embed = new Discord.MessageEmbed();
+        embed
+          .setColor(`#0072BB`)
+          .setTitle('Qeued')
+          .setThumbnail(`${song.thumbnail}`)
+          .setDescription(
+            `
+      [${song.title}](${song.url})
+      `
+          )
+          .setTimestamp();
+        return serverQueue.textChannel.send(embed);
       }
     } catch (error) {
       console.log(error);
@@ -81,6 +92,18 @@ module.exports = {
       })
       .on('error', (error) => console.error(error));
     dispatcher.setVolumeLogarithmic(serverQueue.volume / 4);
-    serverQueue.textChannel.send(`Start playing: **${song.title}**`);
+    const embed = new Discord.MessageEmbed();
+    embed
+      .setColor(`#0072BB`)
+      .setTitle('Now Playing')
+      .setThumbnail(`${song.thumbnail}`)
+      .setDescription(
+        `
+      [${song.title}](${song.url})
+      `
+      )
+      .addField('Requested by: ', `${message.member}`)
+      .setTimestamp();
+    serverQueue.textChannel.send(embed);
   },
 };

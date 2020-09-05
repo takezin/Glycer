@@ -12,3 +12,8 @@
   - [ ] Role info
   - [ ] Change user nickname
 - [ ] Log
+- [ ] Music
+  - [x] Play
+  - [x] Stop
+  - [x] Next
+  - [ ] Repeat
