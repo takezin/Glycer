@@ -1,13 +1,13 @@
 const Discord = require('discord.js');
-
+const args = require('../util/args');
 module.exports = {
   name: 'setnick',
   description: 'Change user nickname!',
   execute(message) {
     const member = message.mentions.members.first();
     const split = message.content.split(/ +/);
-    const args = split.slice(1);
-    const nickname = args[1];
+    const arg = args(message.content);
+    const nickname = arg[1];
 
     member.setNickname(nickname);
 

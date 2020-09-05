@@ -1,17 +1,16 @@
 const Discord = require('discord.js');
-
+const args = require('../util/args');
 module.exports = {
   name: 'role',
   description: 'Give a role to an user!',
   execute(message, client) {
-    const split = message.content.split(/ +/);
-    const args = split.slice(1);
+    const arg = args(message.content);
     const role = message.mentions.roles.first();
     const member = message.mentions.members.first();
-    if (args[0] === 'all') {
+    if (arg[0] === 'all') {
       const roleAll = require('./role/all.js');
       roleAll(message, client, role);
-    } else if (args[0] === 'info') {
+    } else if (arg[0] === 'info') {
       const roleInfo = require('./role/info.js');
       roleInfo(message, client, role);
     } else {

@@ -1,13 +1,13 @@
 const Discord = require('discord.js');
+const args = require('../util/args');
 
 module.exports = {
   name: 'addrole',
   description: 'Create a role!',
   execute(message, client) {
-    const split = message.content.split(/ +/);
-    const args = split.slice(1);
-    const name = args[0];
-    let color = args[1];
+    const arg = args(message.content);
+    const name = arg[0];
+    let color = arg[1];
     if (!name) {
       throw new Error('No given name!');
     }

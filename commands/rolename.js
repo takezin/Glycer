@@ -1,12 +1,12 @@
 const Discord = require('discord.js');
+const args = require('../util/args');
 
 module.exports = {
   name: 'rolename',
   description: 'Change role name!',
   execute(message, client) {
-    const split = message.content.split(/ +/);
-    const args = split.slice(1);
-    const name = args[1];
+    const arg = args(message.content);
+    const name = arg[1];
     if (!name) {
       throw new Error('No new name given!');
     }
@@ -22,7 +22,7 @@ module.exports = {
       .setTitle('Role name changed')
       .addFields(
         { name: 'After', value: `@${role.name}` },
-        { name: 'Before', value: `@${role}` }
+        { name: 'Before', value: `${role}` }
       )
       .setTimestamp();
     message.channel.send(embed);
