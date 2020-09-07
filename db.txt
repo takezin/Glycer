@@ -1,0 +1,22 @@
+serverid: {
+	counter: {
+		member:
+		user:
+		count:
+		online:
+	}
+	perms: {
+		roles: {
+			users:
+			roles:
+		}
+		dj: {
+			users:
+			roles:
+		}
+		users: {
+			users:
+			roles:
+		}
+	}
+}

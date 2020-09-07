@@ -17,3 +17,11 @@
   - [x] Stop
   - [x] Next
   - [ ] Repeat
+- [ ] Permisions
+  - [ ] DJ
+  - [ ] Mod
+- [ ] Counter
+  - [ ] Members
+  - [ ] Users
+  - [ ] Bots
+  - [ ] Online

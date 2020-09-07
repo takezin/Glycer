@@ -5,71 +5,77 @@ module.exports = {
   name: 'play',
   description: 'Play a song in your channel!',
   async execute(message) {
-    try {
-      const args = message.content.split(' ');
-      const queue = message.client.queue;
-      const serverQueue = message.client.queue.get(message.guild.id);
+    if (
+      message.member.roles.cache.some(
+        (role) => role.name === 'admin' || 'mod' || 'dj'
+      )
+    ) {
+      try {
+        const args = message.content.split(' ');
+        const queue = message.client.queue;
+        const serverQueue = message.client.queue.get(message.guild.id);
 
-      const voiceChannel = message.member.voice.channel;
-      if (!voiceChannel)
-        return message.channel.send(
-          'You need to be in a voice channel to play music!'
-        );
-      const permissions = voiceChannel.permissionsFor(message.client.user);
-      if (!permissions.has('CONNECT') || !permissions.has('SPEAK')) {
-        return message.channel.send(
-          'I need the permissions to join and speak in your voice channel!'
-        );
-      }
+        const voiceChannel = message.member.voice.channel;
+        if (!voiceChannel)
+          return message.channel.send(
+            'You need to be in a voice channel to play music!'
+          );
+        const permissions = voiceChannel.permissionsFor(message.client.user);
+        if (!permissions.has('CONNECT') || !permissions.has('SPEAK')) {
+          return message.channel.send(
+            'I need the permissions to join and speak in your voice channel!'
+          );
+        }
 
-      const songInfo = await ytdl.getInfo(args[1]);
-      const song = {
-        title: songInfo.videoDetails.title,
-        url: songInfo.videoDetails.video_url,
-        thumbnail: songInfo.videoDetails.thumbnail.thumbnails[0].url,
-      };
-
-      if (!serverQueue) {
-        const queueContruct = {
-          textChannel: message.channel,
-          voiceChannel: voiceChannel,
-          connection: null,
-          songs: [],
-          volume: 5,
-          playing: true,
+        const songInfo = await ytdl.getInfo(args[1]);
+        const song = {
+          title: songInfo.videoDetails.title,
+          url: songInfo.videoDetails.video_url,
+          thumbnail: songInfo.videoDetails.thumbnail.thumbnails[0].url,
         };
 
-        queue.set(message.guild.id, queueContruct);
+        if (!serverQueue) {
+          const queueContruct = {
+            textChannel: message.channel,
+            voiceChannel: voiceChannel,
+            connection: null,
+            songs: [],
+            volume: 5,
+            playing: true,
+          };
 
-        queueContruct.songs.push(song);
+          queue.set(message.guild.id, queueContruct);
 
-        try {
-          var connection = await voiceChannel.join();
-          queueContruct.connection = connection;
-          this.play(message, queueContruct.songs[0]);
-        } catch (err) {
-          console.log(err);
-          queue.delete(message.guild.id);
-          return message.channel.send(err);
+          queueContruct.songs.push(song);
+
+          try {
+            var connection = await voiceChannel.join();
+            queueContruct.connection = connection;
+            this.play(message, queueContruct.songs[0]);
+          } catch (err) {
+            console.log(err);
+            queue.delete(message.guild.id);
+            return message.channel.send(err);
+          }
+        } else {
+          serverQueue.songs.push(song);
+          const embed = new Discord.MessageEmbed();
+          embed
+            .setColor(`#0072BB`)
+            .setTitle('Qeued')
+            .setThumbnail(`${song.thumbnail}`)
+            .setDescription(
+              `
+          [${song.title}](${song.url})
+          `
+            )
+            .setTimestamp();
+          return serverQueue.textChannel.send(embed);
         }
-      } else {
-        serverQueue.songs.push(song);
-        const embed = new Discord.MessageEmbed();
-        embed
-          .setColor(`#0072BB`)
-          .setTitle('Qeued')
-          .setThumbnail(`${song.thumbnail}`)
-          .setDescription(
-            `
-      [${song.title}](${song.url})
-      `
-          )
-          .setTimestamp();
-        return serverQueue.textChannel.send(embed);
+      } catch (error) {
+        console.log(error);
+        message.channel.send(error.message);
       }
-    } catch (error) {
-      console.log(error);
-      message.channel.send(error.message);
     }
   },
 

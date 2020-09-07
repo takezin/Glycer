@@ -5,17 +5,23 @@ module.exports = {
   name: 'next',
   description: 'Next song in the queue!',
   async execute(message) {
-    const serverQueue = message.client.queue.get(message.guild.id);
-    if (!message.member.voice.channel)
-      return message.channel.send(
-        'You have to be in a voice channel to stop the music!'
-      );
-    serverQueue.songs.shift();
-    try {
-      this.play(message, serverQueue.songs[0]);
-    } catch (err) {
-      console.log(err);
-      return message.channel.send(err);
+    if (
+      message.member.roles.cache.some(
+        (role) => role.name === 'admin' || 'mod' || 'dj'
+      )
+    ) {
+      const serverQueue = message.client.queue.get(message.guild.id);
+      if (!message.member.voice.channel)
+        return message.channel.send(
+          'You have to be in a voice channel to stop the music!'
+        );
+      serverQueue.songs.shift();
+      try {
+        this.play(message, serverQueue.songs[0]);
+      } catch (err) {
+        console.log(err);
+        return message.channel.send(err);
+      }
     }
   },
   play(message, song) {
@@ -44,8 +50,8 @@ module.exports = {
       .setThumbnail(`${song.thumbnail}`)
       .setDescription(
         `
-      [${song.title}](${song.url})
-      `
+          [${song.title}](${song.url})
+          `
       )
       .addField('Requested by: ', `${message.member}`)
       .setTimestamp();
