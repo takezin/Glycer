@@ -2,6 +2,13 @@ const fs = require('fs');
 const Discord = require('discord.js');
 const Client = require('./client/Client');
 const { prefix, token } = require('./config/config');
+const {
+  messageDelete,
+  messageUpdate,
+  userNew,
+  userRemove,
+} = require('./util/log');
+const { updateAll } = require('./util/counter');
 require('./db/mongoose');
 
 const client = new Client();
@@ -16,8 +23,6 @@ for (const file of commandFiles) {
   client.commands.set(command.name, command);
 }
 
-//console.log(client.commands);
-
 client.once('ready', () => {
   console.log('Ready!');
 });
@@ -30,7 +35,26 @@ client.once('disconnect', () => {
   console.log('Disconnect!');
 });
 
+client.on('messageDelete', async (message) => {
+  await messageDelete(message);
+});
+
+client.on('messageUpdate', async (oldMessage, message) => {
+  await messageUpdate(oldMessage, message, client);
+});
+
+client.on('guildMemberAdd', async (member) => {
+  await userNew(member);
+});
+
+client.on('guildMemberRemove', async (member) => {
+  await userRemove(member);
+});
+
 client.on('message', async (message) => {
+  setTimeout((message) => {
+    updateAll(message);
+  }, 300000);
   const args = message.content.slice(prefix.length).split(/ +/);
   const commandName = args.shift().toLowerCase();
   const command = client.commands.get(commandName);

@@ -1,5 +1,21 @@
 const args = require('../util/args');
 const Glycer = require('../db/glycer');
+const {
+  init,
+  memberUpdate,
+  userUpdate,
+  botUpdate,
+  onlineUpdate,
+  updateAll,
+} = require('../util/counter');
+
+const setup = async (message) => {
+  const id = await init(message);
+  await memberUpdate(message, id.members);
+  await userUpdate(message, id.users);
+  await botUpdate(message, id.bots);
+  await onlineUpdate(message, id.online);
+};
 
 module.exports = {
   name: 'count',
@@ -10,22 +26,24 @@ module.exports = {
     ) {
       const arg = args(message.content);
       if (arg[0] === 'setup') {
-        const setup = require('./count/setup');
         setup(message);
+        message.channel.send('Done!');
+      } else if (arg[0] === 'update') {
+        await updateAll(message);
       } else {
         const db = await Glycer.findOne({ serverid: message.guild.id });
         if (arg[0] === 'members') {
-          const members = require('./count/members');
           const channelid = db.count.members;
-          members(message, channelid);
+          memberUpdate(message, channelid);
+          message.channel.send('Members counter updated!');
         } else if (arg[0] === 'users') {
-          const users = require('./count/users');
           const channelid = db.count.users;
-          users(message, channelid);
+          userUpdate(message, channelid);
+          message.channel.send('Users counter updated!');
         } else if (arg[0] === 'bots') {
-          const users = require('./count/bots');
           const channelid = db.count.bots;
-          users(message, channelid);
+          botUpdate(message, channelid);
+          message.channel.send('Bots counter updated!');
         }
       }
     }

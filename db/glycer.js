@@ -11,6 +11,14 @@ const glycerSchema = new mongoose.Schema({
     members: String,
     users: String,
     bots: String,
+    online: String,
+  },
+  log: {
+    server: String,
+    voice: String,
+    def: String,
+    members: String,
+    messages: String,
   },
 });
 
