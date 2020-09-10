@@ -12,6 +12,7 @@ const {
   roleRemove,
   voiceUpdate,
 } = require('./util/log');
+const { roleOnReact } = require('./util/roleOnReact');
 const { updateAll } = require('./util/counter');
 require('./db/mongoose');
 
@@ -71,10 +72,18 @@ client.on('voiceStateUpdate', async (oldState, state) => {
   await voiceUpdate(oldState, state);
 });
 
+client.on('raw', (packet) => {
+  if (!['MESSAGE_REACTION_ADD', 'MESSAGE_REACTION_REMOVE'].includes(packet.t)) {
+    return;
+  }
+  const serverId = packet.d.guild_id;
+  const messageId = packet.d.message_id;
+  const emoji = packet.d.emoji.name;
+  const userId = packet.d.user_id;
+  roleOnReact(serverId, messageId, emoji, userId, client);
+});
+
 client.on('message', async (message) => {
-  setTimeout((message) => {
-    updateAll(message);
-  }, 300000);
   const args = message.content.slice(prefix.length).split(/ +/);
   const commandName = args.shift().toLowerCase();
   const command = client.commands.get(commandName);

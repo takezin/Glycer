@@ -21,6 +21,9 @@ const glycerSchema = new mongoose.Schema({
     members: String,
     messages: String,
   },
+  roleOnReact: {
+    type: mongoose.Schema.Types.Mixed,
+  },
 });
 
 const Glycer = mongoose.model('Glycer', glycerSchema);

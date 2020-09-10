@@ -4,7 +4,7 @@
   - [ ] Kick
   - [x] Ban
   - [ ] Softban
-- [ ] Admin automation
+- [x] Admin automation
   - [x] Role assigment
   - [x] Create roles
   - [x] Delete roles
@@ -12,7 +12,7 @@
   - [x] Roles list
   - [x] Role users list
   - [x] Change user nickname
-  - [ ] Add role on reaction
+  - [x] Add role on reaction
 - [ ] Log
   - [x] Delete message
   - [x] Edit message
@@ -45,10 +45,10 @@
   - [x] Online
 - [ ] Other
   - [ ] Help
-  - [ ] Invite
+  - [x] Invite
 
 ## Color palete:
 
--Red: #d7263d
--Green: #57bc59
--Blue: #0072BB
+- ![#d7263d](https://via.placeholder.com/15/d7263d/000000?text=+) `#d7263d`
+- ![#57bc59](https://via.placeholder.com/15/57bc59/000000?text=+) `#57bc59`
+- ![#0072BB](https://via.placeholder.com/15/0072BB/000000?text=+) `#0072BB`

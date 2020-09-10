@@ -11,10 +11,12 @@ const {
 
 const setup = async (message) => {
   const id = await init(message);
-  await memberUpdate(message, id.members);
-  await userUpdate(message, id.users);
-  await botUpdate(message, id.bots);
-  await onlineUpdate(message, id.online);
+  setTimeout(async () => {
+    await memberUpdate(message, id.members);
+    await userUpdate(message, id.users);
+    await botUpdate(message, id.bots);
+    await onlineUpdate(message, id.online);
+  }, 300000);
 };
 
 module.exports = {
@@ -29,7 +31,10 @@ module.exports = {
         setup(message);
         message.channel.send('Done!');
       } else if (arg[0] === 'update') {
-        await updateAll(message);
+        setTimeout(async () => {
+          await updateAll(message);
+          console.log('time');
+        }, 300000);
       } else {
         const db = await Glycer.findOne({ serverid: message.guild.id });
         if (arg[0] === 'members') {
