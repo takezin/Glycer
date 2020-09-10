@@ -12,13 +12,18 @@ module.exports = {
       const nickname = arg[1];
 
       member.setNickname(nickname);
-
+      let oldName = '';
+      if (!member.nickname) {
+        oldname = member.user.username;
+      } else {
+        oldName = member.nickname;
+      }
       const embed = new Discord.MessageEmbed();
       embed
         .setColor(`#0072BB`)
         .setTitle('User nickname changed')
         .addFields(
-          { name: 'After', value: `@${member.nickname}` },
+          { name: 'After', value: `@${oldName}` },
           { name: 'Before', value: `@${nickname}` }
         )
         .setTimestamp();

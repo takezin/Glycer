@@ -133,7 +133,7 @@ const messageDelete = async (message) => {
       .setFooter(`ID: ${message.author.id}`)
       .setTimestamp();
 
-    channel.send({ embed });
+    channel.send(embed);
   }
 };
 
@@ -143,7 +143,7 @@ const messageUpdate = async (oldMessage, message, client) => {
   if (process.env.BOT_ID === message.author.id) {
     return;
   }
-  if (db.log.messages) {
+  if (db.log.def) {
     let channel = undefined;
     for (i of message.guild.channels.cache) {
       if (i[0] === db.log.messages) {
@@ -163,7 +163,7 @@ const messageUpdate = async (oldMessage, message, client) => {
       .setFooter(`ID: ${message.author.id}`)
       .setTimestamp();
 
-    channel.send({ embed });
+    channel.send(embed);
   }
 };
 
@@ -176,7 +176,7 @@ const userNew = async (member) => {
   if (db.count) {
     await updateAll(member);
   }
-  if (db.log.messages) {
+  if (db.log.def) {
     let channel = undefined;
     for (i of member.guild.channels.cache) {
       if (i[0] === db.log.def) {
@@ -196,7 +196,7 @@ const userNew = async (member) => {
       .setFooter(`ID: ${member.id}`)
       .setTimestamp();
 
-    channel.send({ embed });
+    channel.send(embed);
   }
 };
 
@@ -234,7 +234,134 @@ const userRemove = async (member) => {
       .setFooter(`ID: ${member.id}`)
       .setTimestamp();
 
+    channel.send(embed);
+  }
+};
+
+const memberChange = async (oldMember, member) => {
+  const db = await Glycer.findOne({ serverid: member.guild.id });
+  const {
+    nickChange,
+    nameChange,
+    avatarChange,
+    roleChange,
+  } = require('./member');
+  if (db.log.members) {
+    let channel = undefined;
+    for (i of member.guild.channels.cache) {
+      if (i[0] === db.log.def) {
+        channel = i[1];
+      }
+    }
+    let embed = undefined;
+    if (oldMember.nickname !== member.nickname) {
+      embed = nickChange(oldMember, member);
+    } else if (oldMember.user.username !== member.user.username) {
+      embed = nameChange(oldMember, member);
+    } else if (oldMember.user.avatar !== member.user.avatar) {
+      embed = avatarChange(member);
+    } else if (oldMember._roles.length !== member._roles.length) {
+      embed = roleChange(oldMember, member);
+    }
+    channel.send(embed);
+  }
+};
+
+const roleNew = async (role) => {
+  const db = await Glycer.findOne({ serverid: role.guild.id });
+  if (db.log.server) {
+    let channel = undefined;
+    for (i of role.guild.channels.cache) {
+      if (i[0] === db.log.server) {
+        channel = i[1];
+      }
+    }
+    let embed = new Discord.MessageEmbed()
+      .setTitle(`**New role created**`)
+      .setColor('#57bc59')
+      .setDescription(
+        `**Name:** ${role.name}\n**Color:** #${role.color.toString(16)}`
+      )
+      .setFooter(`ID: ${role.id}`)
+      .setTimestamp();
+
     channel.send({ embed });
+  }
+};
+
+const roleRemove = async (role) => {
+  const db = await Glycer.findOne({ serverid: role.guild.id });
+  if (db.log.server) {
+    let channel = undefined;
+    for (i of role.guild.channels.cache) {
+      if (i[0] === db.log.server) {
+        channel = i[1];
+      }
+    }
+    let embed = new Discord.MessageEmbed()
+      .setTitle(`**Role reoved**`)
+      .setColor('#d7263d')
+      .setDescription(`@${role.name}`)
+      .setFooter(`ID: ${role.id}`)
+      .setTimestamp();
+
+    channel.send({ embed });
+  }
+};
+
+const voiceUpdate = async (oldState, state) => {
+  const db = await Glycer.findOne({ serverid: state.guild.id });
+  if (db.log.server) {
+    let channel = undefined;
+    for (i of state.guild.channels.cache) {
+      if (i[0] === db.log.voice) {
+        channel = i[1];
+      }
+    }
+
+    let user = undefined;
+    for (let usr of state.guild.members.cache) {
+      if (usr[0] === state.id) {
+        user = usr[1];
+      }
+    }
+
+    let embed = new Discord.MessageEmbed();
+    if (state.channelID) {
+      let voiceChannel = undefined;
+      for (let ch of state.guild.channels.cache) {
+        if (ch[0] === state.channelID) {
+          voiceChannel = ch[1];
+        }
+      }
+      embed
+        .setTitle(`**Member joined voice channel**`)
+        .setColor('#57bc59')
+        .setDescription(
+          `**${user.user.username}#${user.user.discriminator}** joined ${voiceChannel}`
+        );
+    } else {
+      let voiceChannel = undefined;
+      for (let ch of state.guild.channels.cache) {
+        if (ch[0] === oldState.channelID) {
+          voiceChannel = ch[1];
+        }
+      }
+      embed
+        .setTitle(`**Member left voice channel**`)
+        .setColor('#d7263d')
+        .setDescription(
+          `**${user.user.username}#${user.user.discriminator}** left ${voiceChannel}`
+        );
+    }
+    embed
+      .setAuthor(
+        `${user.user.username}#${user.user.discriminator}`,
+        `${user.user.displayAvatarURL()}`
+      )
+      .setFooter(`ID: ${state.id}`)
+      .setTimestamp();
+    channel.send(embed);
   }
 };
 
@@ -244,4 +371,8 @@ module.exports = {
   messageUpdate,
   userNew,
   userRemove,
+  memberChange,
+  roleNew,
+  roleRemove,
+  voiceUpdate,
 };

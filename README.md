@@ -4,7 +4,7 @@
   - [ ] Kick
   - [x] Ban
   - [ ] Softban
-- [x] Admin automation
+- [ ] Admin automation
   - [x] Role assigment
   - [x] Create roles
   - [x] Delete roles
@@ -12,20 +12,24 @@
   - [x] Roles list
   - [x] Role users list
   - [x] Change user nickname
+  - [ ] Add role on reaction
 - [ ] Log
   - [x] Delete message
   - [x] Edit message
   - [x] New user
   - [x] Remove user
-  - [ ] User name changed
-  - [ ] New role
+  - [x] User nickname changed
+  - [x] User username changed
+  - [x] User avatar
+  - [x] User add/remove role
+  - [x] New role
   - [ ] Edit role
-  - [ ] Delete role
+  - [x] Delete role
   - [ ] New channel
   - [ ] Delete channel
   - [ ] Edit channel
-  - [ ] Voice channel join
-  - [ ] Voice channel left
+  - [x] Voice channel join
+  - [x] Voice channel left
 - [ ] Music
   - [x] Play
   - [x] Stop
@@ -34,11 +38,14 @@
 - [ ] Permisions
   - [ ] Role
   - [ ] User
-- [ ] Counter
+- [x] Counter
   - [x] Members
   - [x] Users
   - [x] Bots
-  - [ ] Online
+  - [x] Online
+- [ ] Other
+  - [ ] Help
+  - [ ] Invite
 
 ## Color palete:
 
