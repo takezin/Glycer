@@ -6,6 +6,7 @@ const glycerSchema = new mongoose.Schema({
     required: true,
     trim: true,
   },
+  invite: String,
   count: {
     category: String,
     members: String,
