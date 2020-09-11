@@ -115,13 +115,11 @@ const messageDelete = async (message) => {
   const db = await Glycer.findOne({ serverid: message.guild.id });
   if (db.log.messages) {
     let channel = undefined;
-    for (i of message.guild.channels.cache) {
+    for (let i of message.guild.channels.cache) {
       if (i[0] === db.log.messages) {
         channel = i[1];
       }
     }
-    // let logs = await message.guild.fetchAuditLogs({ type: 72 });
-    // let entry = logs.entries.first();
     let embed = new Discord.MessageEmbed()
       .setTitle(`**Message deleted in #${message.channel.name}**`)
       .setColor('#d7263d')
@@ -134,13 +132,71 @@ const messageDelete = async (message) => {
       .setTimestamp();
 
     channel.send(embed);
+    if (db.roleOnReact[message.id]) {
+      const prev = db.roleOnReact;
+      console.log(prev);
+      delete prev[message.id];
+      console.log(prev);
+      await db.updateOne({
+        roleOnReact: prev,
+      });
+      await db.save();
+    }
+  }
+};
+
+const messageDeleteBulk = async (messages, client) => {
+  let serverid = undefined;
+  for (let i of client.guilds.cache) {
+    serverid = i[1].id;
+  }
+  const db = await Glycer.findOne({ serverid });
+  if (db.log.messages) {
+    let channel = undefined;
+    for (let i of client.guilds.cache) {
+      const channels = i[1].channels.cache;
+      for (let c of channels) {
+        if (c[0] === db.log.messages) {
+          channel = c[1];
+        }
+      }
+    }
+    let deletedMessages = [];
+    for (let i of messages) {
+      deletedMessages = [i[1], ...deletedMessages];
+    }
+    let embed = new Discord.MessageEmbed();
+    for (let message of deletedMessages) {
+      embed
+        .setTitle(`**Message deleted in #${message.channel.name}**`)
+        .setColor('#d7263d')
+        .setAuthor(
+          `${message.author.tag}`,
+          `${message.author.displayAvatarURL()}`
+        )
+        .setDescription(`${message.content}`)
+        .setFooter(`ID: ${message.author.id}`)
+        .setTimestamp();
+      channel.send(embed);
+
+      if (db.roleOnReact[message.id]) {
+        const prev = db.roleOnReact;
+        console.log(prev);
+        delete prev[message.id];
+        console.log(prev);
+        await db.updateOne({
+          roleOnReact: prev,
+        });
+        await db.save();
+      }
+    }
   }
 };
 
 const messageUpdate = async (oldMessage, message, client) => {
   const db = await Glycer.findOne({ serverid: message.guild.id });
-
-  if (process.env.BOT_ID === message.author.id) {
+  console.log(client.user.id);
+  if (client.user.id === message.author.id) {
     return;
   }
   if (db.log.def) {
@@ -368,6 +424,7 @@ const voiceUpdate = async (oldState, state) => {
 module.exports = {
   init,
   messageDelete,
+  messageDeleteBulk,
   messageUpdate,
   userNew,
   userRemove,

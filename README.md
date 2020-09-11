@@ -1,7 +1,7 @@
 ## TODO:
 
 - [ ] Moderation features
-  - [ ] Kick
+  - [x] Kick
   - [x] Ban
   - [ ] Softban
 - [x] Admin automation

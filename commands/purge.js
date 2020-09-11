@@ -1,6 +1,6 @@
 module.exports = {
   name: 'purge',
-  description: 'Delete the last messages in all chats.',
+  description: 'Delete the last messages in the chat.',
   async execute(message) {
     if (
       message.member.roles.cache.some((role) => role.name === 'admin' || 'mod')
@@ -9,6 +9,7 @@ module.exports = {
       let deleteCount = 0;
       try {
         deleteCount = parseInt(args[1], 10);
+        deleteCount++;
       } catch (err) {
         return message.reply(
           'Please provide the number of messages to delete. (max 100)'

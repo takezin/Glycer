@@ -4,6 +4,7 @@ const Client = require('./client/Client');
 const { prefix, token } = require('./config/config');
 const {
   messageDelete,
+  messageDeleteBulk,
   messageUpdate,
   userNew,
   userRemove,
@@ -13,7 +14,6 @@ const {
   voiceUpdate,
 } = require('./util/log');
 const { roleOnReact } = require('./util/roleOnReact');
-const { updateAll } = require('./util/counter');
 require('./db/mongoose');
 
 const client = new Client();
@@ -42,6 +42,10 @@ client.once('disconnect', () => {
 
 client.on('messageDelete', async (message) => {
   await messageDelete(message);
+});
+
+client.on('messageDeleteBulk', async (messages) => {
+  await messageDeleteBulk(messages, client);
 });
 
 client.on('messageUpdate', async (oldMessage, message) => {
@@ -80,7 +84,11 @@ client.on('raw', (packet) => {
   const messageId = packet.d.message_id;
   const emoji = packet.d.emoji.name;
   const userId = packet.d.user_id;
-  roleOnReact(serverId, messageId, emoji, userId, client);
+  let remove = undefined;
+  if (packet.t === 'MESSAGE_REACTION_REMOVE') {
+    remove = true;
+  }
+  roleOnReact(serverId, messageId, emoji, userId, client, remove);
 });
 
 client.on('message', async (message) => {

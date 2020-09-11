@@ -31,7 +31,8 @@ module.exports = {
         setup(message);
         message.channel.send('Done!');
       } else if (arg[0] === 'update') {
-        setTimeout(async () => {
+        await updateAll(message);
+        setInterval(async () => {
           await updateAll(message);
           console.log('time');
         }, 300000);
