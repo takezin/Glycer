@@ -195,7 +195,6 @@ const messageDeleteBulk = async (messages, client) => {
 
 const messageUpdate = async (oldMessage, message, client) => {
   const db = await Glycer.findOne({ serverid: message.guild.id });
-  console.log(client.user.id);
   if (client.user.id === message.author.id) {
     return;
   }

@@ -59,17 +59,17 @@ const roleChange = (oldMember, member) => {
   const embed = new Discord.MessageEmbed();
   let change = undefined;
   console.log(oldRoles);
+  console.log(newRoles);
   if (oldRoles.length > newRoles.length) {
     for (let role of oldRoles) {
-      console.log(role);
-      if (!newRoles.some((i) => i.name === role.name)) {
+      if (!newRoles.some((i) => i === role)) {
         change = role;
       }
     }
     embed.setColor(`#d7263d`).setTitle('**Role removed**');
   } else {
     for (let role of newRoles) {
-      if (!oldRoles.some((i) => i.name === role.name)) {
+      if (!oldRoles.some((i) => i === role)) {
         change = role;
       }
     }

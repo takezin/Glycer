@@ -43,6 +43,10 @@
   - [x] Users
   - [x] Bots
   - [x] Online
+- [ ] Info
+  - [x] User
+  - [x] Role
+  - [ ] Server
 - [ ] Other
   - [ ] Help
   - [x] Invite

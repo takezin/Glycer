@@ -5,9 +5,7 @@ const removeAll = (message, client, role) => {
   if (!role) {
     throw new Error('No role given!');
   }
-  console.log(role.members.size);
   if (role.members.size === 0) {
-    console.log('añadir');
     message.guild.members.cache.map((element) => {
       element.roles.add(role);
     });
@@ -17,7 +15,6 @@ const removeAll = (message, client, role) => {
       .setDescription(`${role}`)
       .setTimestamp();
   } else {
-    console.log('eliminar');
     message.guild.members.cache.map((element) => {
       element.roles.remove(role);
     });
