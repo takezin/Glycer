@@ -29,6 +29,8 @@ module.exports = {
         .catch((error) =>
           message.reply(`Couldn't delete messages because of: ${error}`)
         );
+    } else {
+      message.reply("You don't have permission to do that");
     }
   },
 };

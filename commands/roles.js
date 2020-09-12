@@ -3,7 +3,7 @@ const Discord = require('discord.js');
 module.exports = {
   name: 'roles',
   description: 'List of existing roles!',
-  execute(message, client) {
+  execute(message) {
     if (
       message.member.roles.cache.some((role) => role.name === 'admin' || 'mod')
     ) {
@@ -16,6 +16,8 @@ module.exports = {
       const embed = new Discord.MessageEmbed();
       embed.setColor(`#0072BB`).addField('Role List', roles);
       message.channel.send(embed);
+    } else {
+      message.reply("You don't have permission to do that");
     }
   },
 };

@@ -20,6 +20,8 @@ module.exports = {
         .setDescription(`@${role.name}`)
         .setTimestamp();
       message.channel.send(embed);
+    } else {
+      message.reply("You don't have permission to do that");
     }
   },
 };

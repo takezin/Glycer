@@ -5,7 +5,7 @@ const moment = require('moment');
 module.exports = {
   name: 'whois',
   description: 'Get information about a user.',
-  execute(message, client) {
+  execute(message) {
     if (
       message.member.roles.cache.some((role) => role.name === 'admin' || 'mod')
     ) {
@@ -47,6 +47,8 @@ module.exports = {
       // .setTimestamp()
       // .setFooter('Some footer text here', 'https://i.imgur.com/wSTFkRM.png');
       message.channel.send(embed);
+    } else {
+      message.reply("You don't have permission to do that");
     }
   },
 };

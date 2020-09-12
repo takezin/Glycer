@@ -14,6 +14,8 @@ module.exports = {
         );
       serverQueue.songs = [];
       serverQueue.connection.dispatcher.end();
+    } else {
+      message.reply("You don't have permission to do that");
     }
   },
 };

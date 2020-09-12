@@ -8,7 +8,15 @@ module.exports = {
       message.member.roles.cache.some((role) => role.name === 'admin' || 'mod')
     ) {
       const arg = args(message.content);
-      const role = message.mentions.roles.first();
+      let role = message.mentions.roles.first();
+      if (!role) {
+        for (let i of message.guild.roles.cache) {
+          if (i[0] === arg[1]) {
+            role = i[1];
+          }
+        }
+      }
+
       const member = message.mentions.members.first();
       if (arg[0] === 'all') {
         const roleAll = require('./role/all.js');
@@ -41,6 +49,8 @@ module.exports = {
         }
         return message.channel.send(embed);
       }
+    } else {
+      message.reply("You don't have permission to do that");
     }
   },
 };

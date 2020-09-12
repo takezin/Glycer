@@ -4,12 +4,31 @@ const moment = require('moment');
 const { updateAll } = require('./counter');
 
 const init = async (message) => {
+  let admin = undefined;
+  let mod = undefined;
+  for (let i of message.guild.roles.cache) {
+    if (i[1].name === 'admin') {
+      admin = i[1];
+    } else if (i[1].name === 'mod') {
+      mod = i[1];
+    }
+  }
+
   const category = await message.guild.channels.create('Log', {
     type: 'category',
     permissionOverwrites: [
       {
         id: message.guild.roles.everyone.id,
         deny: ['VIEW_CHANNEL'],
+      },
+      {
+        id: admin.id,
+        allow: ['VIEW_CHANNEL'],
+      },
+      {
+        id: mod.id,
+        allow: ['VIEW_CHANNEL'],
+        deny: ['SEND_MESSAGES', 'MANAGE_MESSAGES'],
       },
     ],
   });
@@ -255,7 +274,7 @@ const userNew = async (member) => {
   }
 };
 
-const userRemove = async (member) => {
+const userDelete = async (member) => {
   const db = await Glycer.findOne({ serverid: member.guild.id });
   if (db.count) {
     await updateAll(member);
@@ -344,7 +363,7 @@ const roleNew = async (role) => {
   }
 };
 
-const roleRemove = async (role) => {
+const roleDelete = async (role) => {
   const db = await Glycer.findOne({ serverid: role.guild.id });
   if (db.log.server) {
     let channel = undefined;
@@ -420,15 +439,70 @@ const voiceUpdate = async (oldState, state) => {
   }
 };
 
+const channelNew = async (channel) => {
+  const db = await Glycer.findOne({ serverid: channel.guild.id });
+  if (db.log.server) {
+    let ch = undefined;
+    for (i of channel.guild.channels.cache) {
+      if (i[0] === db.log.server) {
+        ch = i[1];
+      }
+    }
+    const type = channel.type.charAt(0).toUpperCase() + channel.type.slice(1);
+    let category = 'None';
+    for (let i of channel.guild.channels.cache) {
+      if (i[0] === channel.parentID) {
+        category = i[1].name;
+      }
+    }
+    let embed = new Discord.MessageEmbed()
+      .setTitle(`**${type} channel created**`)
+      .setColor('#57bc59')
+      .setDescription(`**Name:** ${channel.name}\n**Category:** ${category}`)
+      .setFooter(`ID: ${channel.id}`)
+      .setTimestamp();
+
+    ch.send({ embed });
+  }
+};
+
+const channelDelete = async (channel) => {
+  const db = await Glycer.findOne({ serverid: channel.guild.id });
+  if (db.log.server) {
+    let ch = undefined;
+    for (i of channel.guild.channels.cache) {
+      if (i[0] === db.log.server) {
+        ch = i[1];
+      }
+    }
+    const type = channel.type.charAt(0).toUpperCase() + channel.type.slice(1);
+    let category = 'None';
+    for (let i of channel.guild.channels.cache) {
+      if (i[0] === channel.parentID) {
+        category = i[1].name;
+      }
+    }
+    let embed = new Discord.MessageEmbed()
+      .setTitle(`**${type} channel deleted**`)
+      .setColor('#d7263d')
+      .setDescription(`**Name:** ${channel.name}\n**Category:** ${category}`)
+      .setFooter(`ID: ${channel.id}`)
+      .setTimestamp();
+
+    ch.send({ embed });
+  }
+};
 module.exports = {
   init,
   messageDelete,
   messageDeleteBulk,
   messageUpdate,
   userNew,
-  userRemove,
+  userDelete,
   memberChange,
   roleNew,
-  roleRemove,
+  roleDelete,
   voiceUpdate,
+  channelNew,
+  channelDelete,
 };

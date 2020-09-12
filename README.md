@@ -25,8 +25,8 @@
   - [x] New role
   - [ ] Edit role
   - [x] Delete role
-  - [ ] New channel
-  - [ ] Delete channel
+  - [x] New channel
+  - [x] Delete channel
   - [ ] Edit channel
   - [x] Voice channel join
   - [x] Voice channel left
@@ -36,7 +36,7 @@
   - [x] Next
   - [ ] Repeat
 - [ ] Permisions
-  - [ ] Role
+  - [x] Role
   - [ ] User
 - [x] Counter
   - [x] Members
@@ -46,7 +46,7 @@
 - [ ] Info
   - [x] User
   - [x] Role
-  - [ ] Server
+  - [x] Server
 - [ ] Other
   - [ ] Help
   - [x] Invite

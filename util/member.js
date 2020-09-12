@@ -58,8 +58,6 @@ const roleChange = (oldMember, member) => {
   const newRoles = member._roles;
   const embed = new Discord.MessageEmbed();
   let change = undefined;
-  console.log(oldRoles);
-  console.log(newRoles);
   if (oldRoles.length > newRoles.length) {
     for (let role of oldRoles) {
       if (!newRoles.some((i) => i === role)) {

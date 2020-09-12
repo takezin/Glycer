@@ -7,11 +7,13 @@ const {
   messageDeleteBulk,
   messageUpdate,
   userNew,
-  userRemove,
+  userDelete,
   memberChange,
   roleNew,
-  roleRemove,
+  roleDelete,
   voiceUpdate,
+  channelNew,
+  channelDelete,
 } = require('./util/log');
 const { roleOnReact } = require('./util/roleOnReact');
 require('./db/mongoose');
@@ -57,7 +59,7 @@ client.on('guildMemberAdd', async (member) => {
 });
 
 client.on('guildMemberRemove', async (member) => {
-  await userRemove(member);
+  await userDelete(member);
 });
 
 client.on('guildMemberUpdate', async (oldMember, member) => {
@@ -69,11 +71,19 @@ client.on('roleCreate', async (role) => {
 });
 
 client.on('roleDelete', async (role) => {
-  await roleRemove(role);
+  await roleDelete(role);
 });
 
 client.on('voiceStateUpdate', async (oldState, state) => {
   await voiceUpdate(oldState, state);
+});
+
+client.on('channelCreate', async (channel) => {
+  await channelNew(channel);
+});
+
+client.on('channelDelete', async (channel) => {
+  await channelDelete(channel);
 });
 
 client.on('raw', (packet) => {

@@ -18,6 +18,8 @@ module.exports = {
         setup(message);
         message.channel.send('Done!');
       }
+    } else {
+      message.reply("You don't have permission to do that");
     }
   },
 };

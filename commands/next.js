@@ -22,6 +22,8 @@ module.exports = {
         console.log(err);
         return message.channel.send(err);
       }
+    } else {
+      message.reply("You don't have permission to do that");
     }
   },
   play(message, song) {

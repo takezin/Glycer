@@ -76,6 +76,8 @@ module.exports = {
         console.log(error);
         message.channel.send(error.message);
       }
+    } else {
+      message.reply("You don't have permission to do that");
     }
   },
 

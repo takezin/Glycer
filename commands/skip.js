@@ -15,6 +15,8 @@ module.exports = {
       if (!serverQueue)
         return message.channel.send('There is no song that I could skip!');
       serverQueue.connection.dispatcher.end();
+    } else {
+      message.reply("You don't have permission to do that");
     }
   },
 };

@@ -24,6 +24,8 @@ module.exports = {
       } else {
         message.reply("You didn't mention the user to kick!");
       }
+    } else {
+      message.reply("You don't have permission to do that");
     }
   },
 };

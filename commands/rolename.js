@@ -4,7 +4,7 @@ const args = require('../util/args');
 module.exports = {
   name: 'rolename',
   description: 'Change role name!',
-  execute(message, client) {
+  execute(message) {
     if (
       message.member.roles.cache.some((role) => role.name === 'admin' || 'mod')
     ) {
@@ -29,6 +29,8 @@ module.exports = {
         )
         .setTimestamp();
       message.channel.send(embed);
+    } else {
+      message.reply("You don't have permission to do that");
     }
   },
 };

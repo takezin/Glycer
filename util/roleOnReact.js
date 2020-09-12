@@ -35,7 +35,6 @@ const roleOnReact = async (
         user = i[1];
       }
     }
-    console.log();
     if (remove && user.roles.cache.some((i) => i.id === roleId)) {
       user.roles.remove(role);
     } else {
