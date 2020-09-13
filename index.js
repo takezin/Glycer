@@ -11,6 +11,7 @@ const {
   memberChange,
   roleNew,
   roleDelete,
+  roleUpdate,
   voiceUpdate,
   channelNew,
   channelDelete,
@@ -72,6 +73,10 @@ client.on('roleCreate', async (role) => {
 
 client.on('roleDelete', async (role) => {
   await roleDelete(role);
+});
+
+client.on('roleUpdate', async (oldRole, role) => {
+  await roleUpdate(oldRole, role);
 });
 
 client.on('voiceStateUpdate', async (oldState, state) => {

@@ -492,6 +492,63 @@ const channelDelete = async (channel) => {
     ch.send({ embed });
   }
 };
+
+const roleUpdate = async (oldRole, role) => {
+  const db = await Glycer.findOne({ serverid: role.guild.id });
+  const permsChange = require('./permsChange');
+  if (db.log.server) {
+    let channel = undefined;
+    for (i of role.guild.channels.cache) {
+      if (i[0] === db.log.def) {
+        channel = i[1];
+      }
+    }
+    const embed = new Discord.MessageEmbed();
+    embed
+      .setColor(`#0072BB`)
+      .setTitle(`**Role "${role.name}" updated**`)
+      .setFooter(`ID: ${role.id}`)
+      .setTimestamp();
+    let before = '';
+    let after = '';
+    if (oldRole.name !== role.name) {
+      before = before + `**Name:** ${oldRole.name}\n`;
+      after = after + `**Name:** ${role.name}\n`;
+    }
+    if (oldRole.color !== role.color) {
+      before = before + `**Color:** #${oldRole.color.toString(16)}\n`;
+      after = after + `**Color:** #${role.color.toString(16)}\n`;
+    }
+    if (oldRole.hoist !== role.hoist) {
+      //channel.type.charAt(0).toUpperCase() + channel.type.slice(1)
+      before = before + `**Separated:** ${oldRole.hoist}\n`;
+      after = after + `**Separated:** ${role.hoist}\n`;
+    }
+    if (oldRole.mentionable !== role.mentionable) {
+      before = before + `**Mentionable:** ${oldRole.mentionable}\n`;
+      after = after + `**Mentionable:** ${oldRole.mentionable}\n`;
+    }
+    if (after && before) {
+      embed.addFields(
+        { name: '**Before**', value: `${before}`, inline: true },
+        { name: '**After**', value: `${after}`, inline: true }
+      );
+    }
+
+    if (oldRole.permissions !== role.permissions) {
+      const perms = permsChange(oldRole, role);
+      if (perms.added || perms.removed) {
+        embed.addFields({
+          name: '**Permissions**',
+          value: `**Added:** ${perms.added}\n **Removed:** ${perms.removed}`,
+          inline: true,
+        });
+      }
+    }
+    channel.send(embed);
+  }
+};
+
 module.exports = {
   init,
   messageDelete,
@@ -502,6 +559,7 @@ module.exports = {
   memberChange,
   roleNew,
   roleDelete,
+  roleUpdate,
   voiceUpdate,
   channelNew,
   channelDelete,

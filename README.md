@@ -43,7 +43,7 @@
   - [x] Users
   - [x] Bots
   - [x] Online
-- [ ] Info
+- [x] Info
   - [x] User
   - [x] Role
   - [x] Server
