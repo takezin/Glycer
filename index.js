@@ -19,6 +19,12 @@ const {
 const { roleOnReact } = require('./util/roleOnReact');
 require('./db/mongoose');
 
+//R10 Heroku error
+const express = require('express');
+const app = express();
+app.get('/', (req, res) => res.send('Glycer is running!'));
+app.listen(process.env.PORT || 3030, () => console.log('Listening'));
+
 const client = new Client();
 client.commands = new Discord.Collection();
 
