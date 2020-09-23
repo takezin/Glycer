@@ -35,10 +35,13 @@ const roleOnReact = async (
         user = i[1];
       }
     }
-    if (remove && user.roles.cache.some((i) => i.id === roleId)) {
-      user.roles.remove(role);
-    } else {
-      user.roles.add(role);
+    if (user.id != client.user.id) {
+      console.log(user.id, client.id);
+      if (remove && user.roles.cache.some((i) => i.id === roleId)) {
+        user.roles.remove(role);
+      } else {
+        user.roles.add(role);
+      }
     }
   }
 };

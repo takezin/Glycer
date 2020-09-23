@@ -58,6 +58,7 @@ client.on('messageDeleteBulk', async (messages) => {
 });
 
 client.on('messageUpdate', async (oldMessage, message) => {
+  if (message.author.bot) return;
   await messageUpdate(oldMessage, message, client);
 });
 
