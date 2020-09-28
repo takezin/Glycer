@@ -50,6 +50,9 @@
 - [ ] Other
   - [ ] Help
   - [x] Invite
+- [ ] Leveling system
+  - [ ] Messages counter
+  - [ ] Experience - Level
 
 ## Color palete:
 

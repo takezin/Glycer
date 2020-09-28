@@ -16,27 +16,12 @@ const roleOnReact = async (
   }
   if (db.roleOnReact[messageId]) {
     const roleId = db.roleOnReact[messageId][emoji];
+    const serverGuild = await client.guilds.fetch(serverId);
+    const role = await serverGuild.roles.fetch(roleId);
+    console.log(role);
+    const user = await serverGuild.members.fetch(userId);
 
-    let rolesCache = undefined;
-    let usersCache = undefined;
-    for (let i of client.guilds.cache) {
-      rolesCache = i[1].roles.cache;
-      usersCache = i[1].members.cache;
-    }
-    let role = undefined;
-    for (let i of rolesCache) {
-      if (i[0] === roleId) {
-        role = i[1];
-      }
-    }
-    let user = undefined;
-    for (let i of usersCache) {
-      if (i[0] === userId) {
-        user = i[1];
-      }
-    }
     if (user.id != client.user.id) {
-      console.log(user.id, client.id);
       if (remove && user.roles.cache.some((i) => i.id === roleId)) {
         user.roles.remove(role);
       } else {

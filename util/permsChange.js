@@ -1,7 +1,6 @@
 const permsChange = (oldRole, role) => {
   const permBefore = oldRole.permissions.toArray();
   const permAfter = role.permissions.toArray();
-  console.log(permBefore, permAfter);
   let added = '';
   let removed = '';
   for (let perm of permBefore) {

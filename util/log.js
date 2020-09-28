@@ -200,9 +200,7 @@ const messageDeleteBulk = async (messages, client) => {
 
       if (db.roleOnReact[message.id]) {
         const prev = db.roleOnReact;
-        console.log(prev);
         delete prev[message.id];
-        console.log(prev);
         await db.updateOne({
           roleOnReact: prev,
         });
