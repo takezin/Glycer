@@ -9,13 +9,13 @@ const {
   updateAll,
 } = require('../util/counter');
 
-const setup = async (message) => {
-  const id = await init(message);
+const setup = async (guild) => {
+  const id = await init(guild);
   setTimeout(async () => {
-    await memberUpdate(message, id.members);
-    await userUpdate(message, id.users);
-    await botUpdate(message, id.bots);
-    await onlineUpdate(message, id.online);
+    await memberUpdate(guild, id.members);
+    await userUpdate(guild, id.users);
+    await botUpdate(guild, id.bots);
+    await onlineUpdate(guild, id.online);
   }, 300000);
 };
 
@@ -28,27 +28,28 @@ module.exports = {
     ) {
       const arg = args(message.content);
       if (arg[0] === 'setup') {
-        setup(message);
+        setup(message.guild);
         message.channel.send('Done!');
       } else if (arg[0] === 'update') {
-        await updateAll(message);
+        console.log(message.guild);
+        await updateAll(message.guild);
         setInterval(async () => {
-          await updateAll(message);
+          await updateAll(message.guild);
           console.log('Updating counter');
         }, 300000);
       } else {
         const db = await Glycer.findOne({ serverid: message.guild.id });
         if (arg[0] === 'members') {
           const channelid = db.count.members;
-          memberUpdate(message, channelid);
+          memberUpdate(message.guild, channelid);
           message.channel.send('Members counter updated!');
         } else if (arg[0] === 'users') {
           const channelid = db.count.users;
-          userUpdate(message, channelid);
+          userUpdate(message.guild, channelid);
           message.channel.send('Users counter updated!');
         } else if (arg[0] === 'bots') {
           const channelid = db.count.bots;
-          botUpdate(message, channelid);
+          botUpdate(message.guild, channelid);
           message.channel.send('Bots counter updated!');
         }
       }

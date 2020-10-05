@@ -16,6 +16,7 @@ const {
   channelNew,
   channelDelete,
 } = require('./util/log');
+const { updateAll } = require('./util/counter');
 const { roleOnReact } = require('./util/roleOnReact');
 require('./db/mongoose');
 
@@ -37,8 +38,11 @@ for (const file of commandFiles) {
   client.commands.set(command.name, command);
 }
 
-client.once('ready', () => {
+client.once('ready', async () => {
   console.log('Ready!');
+  for (let i of client.guilds.cache) {
+    await updateAll(i[1]);
+  }
 });
 
 client.once('reconnecting', () => {
@@ -122,11 +126,7 @@ client.on('message', async (message) => {
   if (!message.content.startsWith(prefix)) return;
 
   try {
-    if (commandName == 'ban' || commandName == 'userinfo') {
-      command.execute(message, client);
-    } else {
-      command.execute(message);
-    }
+    command.execute(message, client);
   } catch (error) {
     console.error(error);
     message.reply(

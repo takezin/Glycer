@@ -1,20 +1,20 @@
 const Glycer = require('../db/glycer');
 
-const init = async (message) => {
-  const category = await message.guild.channels.create('📊 Server stats 📊', {
+const init = async (guild) => {
+  const category = await guild.channels.create('📊 Server stats 📊', {
     type: 'category',
     permissionOverwrites: [
       {
-        id: message.guild.roles.everyone.id,
+        id: guild.roles.everyone.id,
         deny: ['CONNECT'],
       },
     ],
   });
-  const members = await memberCount(message, category);
-  const users = await userCount(message, category);
-  const bots = await botCount(message, category);
-  const online = await onlineCount(message, category);
-  let db = await Glycer.findOne({ serverid: message.guild.id });
+  const members = await memberCount(guild, category);
+  const users = await userCount(guild, category);
+  const bots = await botCount(guild, category);
+  const online = await onlineCount(guild, category);
+  let db = await Glycer.findOne({ serverid: guild.id });
   if (db) {
     await db.updateOne({
       count: {
@@ -27,7 +27,7 @@ const init = async (message) => {
     });
   } else {
     db = new Glycer({
-      serverid: message.guild.id,
+      serverid: guild.id,
       count: {
         category: category.id,
         members,
@@ -45,9 +45,9 @@ const init = async (message) => {
   return { members, users, bots, online };
 };
 
-const memberCount = async (message, category) => {
+const memberCount = async (guild, category) => {
   try {
-    const channel = await message.guild.channels.create('Members: ', {
+    const channel = await guild.channels.create('Members: ', {
       type: 'voice',
       parent: category,
     });
@@ -56,9 +56,9 @@ const memberCount = async (message, category) => {
     console.log(e);
   }
 };
-const botCount = async (message, category) => {
+const botCount = async (guild, category) => {
   try {
-    const channel = await message.guild.channels.create('Bots: ', {
+    const channel = await guild.channels.create('Bots: ', {
       type: 'voice',
       parent: category,
     });
@@ -67,9 +67,9 @@ const botCount = async (message, category) => {
     console.log(e);
   }
 };
-const userCount = async (message, category) => {
+const userCount = async (guild, category) => {
   try {
-    const channel = await message.guild.channels.create('Humans: ', {
+    const channel = await guild.channels.create('Humans: ', {
       type: 'voice',
       parent: category,
     });
@@ -79,9 +79,9 @@ const userCount = async (message, category) => {
   }
 };
 
-const onlineCount = async (message, category) => {
+const onlineCount = async (guild, category) => {
   try {
-    const channel = await message.guild.channels.create('Online: ', {
+    const channel = await guild.channels.create('Online: ', {
       type: 'voice',
       parent: category,
     });
@@ -90,68 +90,68 @@ const onlineCount = async (message, category) => {
     console.log(e);
   }
 };
-const memberUpdate = (message, id) => {
+const memberUpdate = (guild, id) => {
   let channel = undefined;
-  for (i of message.guild.channels.cache) {
+  for (i of guild.channels.cache) {
     if (i[0] === id) {
       channel = i[1];
     }
   }
-  const members = message.guild.members.cache;
+  const members = guild.members.cache;
   channel.setName(`Members: ${members.size}`);
 };
 
-const botUpdate = (message, id) => {
+const botUpdate = (guild, id) => {
   let channel = undefined;
-  for (i of message.guild.channels.cache) {
+  for (i of guild.channels.cache) {
     if (i[0] === id) {
       channel = i[1];
     }
   }
-  const members = message.guild.members.cache;
+  const members = guild.members.cache;
   let numUsers = members.filter((member) => member.user.bot).size;
   channel.setName(`Bots: ${numUsers}`);
 };
 
-const userUpdate = (message, id) => {
+const userUpdate = (guild, id) => {
   let channel = undefined;
-  for (i of message.guild.channels.cache) {
+  for (i of guild.channels.cache) {
     if (i[0] === id) {
       channel = i[1];
     }
   }
-  const members = message.guild.members.cache;
+  const members = guild.members.cache;
   let numUsers = members.filter((member) => !member.user.bot).size;
   channel.setName(`Humans: ${numUsers}`);
 };
 
-const onlineUpdate = (message, id) => {
+const onlineUpdate = (guild, id) => {
   let channel = undefined;
-  for (i of message.guild.channels.cache) {
+  for (i of guild.channels.cache) {
     if (i[0] === id) {
       channel = i[1];
     }
   }
-  const members = message.guild.members.cache;
+  const members = guild.members.cache;
   const online = members.filter(
     (member) => member.presence.status === 'online' && !member.user.bot
   );
   channel.setName(`Online: ${online.size}`);
 };
 
-const updateAll = async (message) => {
-  const db = await Glycer.findOne({ serverid: message.guild.id });
+const updateAll = async (guild) => {
+  const db = await Glycer.findOne({ serverid: guild.id });
   if (db.count.members) {
-    memberUpdate(message, db.count.members);
+    memberUpdate(guild, db.count.members);
   }
   if (db.count.users) {
-    userUpdate(message, db.count.users);
+    userUpdate(guild, db.count.users);
   }
   if (db.count.bots) {
-    botUpdate(message, db.count.bots);
+    botUpdate(guild, db.count.bots);
   }
   if (db.count.online) {
-    onlineUpdate(message, db.count.online);
+    onlineUpdate(guild, db.count.online);
   }
 };
 module.exports = {

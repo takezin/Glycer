@@ -321,7 +321,7 @@ const memberChange = async (oldMember, member) => {
   if (db.log.members) {
     let channel = undefined;
     for (i of member.guild.channels.cache) {
-      if (i[0] === db.log.def) {
+      if (i[0] === db.log.members) {
         channel = i[1];
       }
     }

@@ -23,7 +23,7 @@
   - [x] User avatar
   - [x] User add/remove role
   - [x] New role
-  - [ ] Edit role
+  - [x] Edit role
   - [x] Delete role
   - [x] New channel
   - [x] Delete channel
