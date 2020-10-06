@@ -35,7 +35,6 @@ module.exports = {
         await updateAll(message.guild);
         setInterval(async () => {
           await updateAll(message.guild);
-          console.log('Updating counter');
         }, 300000);
       } else {
         const db = await Glycer.findOne({ serverid: message.guild.id });

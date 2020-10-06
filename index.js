@@ -42,6 +42,9 @@ client.once('ready', async () => {
   console.log('Ready!');
   for (let i of client.guilds.cache) {
     await updateAll(i[1]);
+    setInterval(async () => {
+      await updateAll(i[1]);
+    }, 300000);
   }
 });
 

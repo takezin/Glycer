@@ -141,17 +141,20 @@ const onlineUpdate = (guild, id) => {
 
 const updateAll = async (guild) => {
   const db = await Glycer.findOne({ serverid: guild.id });
-  if (db.count.members) {
-    memberUpdate(guild, db.count.members);
-  }
-  if (db.count.users) {
-    userUpdate(guild, db.count.users);
-  }
-  if (db.count.bots) {
-    botUpdate(guild, db.count.bots);
-  }
-  if (db.count.online) {
-    onlineUpdate(guild, db.count.online);
+  if (db) {
+    if (db.count.members) {
+      memberUpdate(guild, db.count.members);
+    }
+    if (db.count.users) {
+      userUpdate(guild, db.count.users);
+    }
+    if (db.count.bots) {
+      botUpdate(guild, db.count.bots);
+    }
+    if (db.count.online) {
+      onlineUpdate(guild, db.count.online);
+    }
+    console.log(`Updating counter [${guild.name}: ${guild.id}]`);
   }
 };
 module.exports = {
